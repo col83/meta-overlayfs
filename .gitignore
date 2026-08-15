@@ -1,4 +1,8 @@
+
+/.cargo
+!/.cargo/config.toml
+Cargo.lock
+
 /target
 /out
-Cargo.lock
-*.log
+
