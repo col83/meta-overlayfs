@@ -82,18 +82,26 @@ post_install_to_image() {
     mkdir -p "$MOD_IMG_DIR"
     set_perm_recursive "$MOD_IMG_DIR" 0 0 0755 0644
 
-    # Move all partition directories
-    for partition in system vendor product system_ext odm oem; do
+        for partition in system vendor product system_ext odm oem; do
         if [ -d "$MODPATH/$partition" ]; then
-            ui_print "- Copying $partition/"
+            ui_print "- Copying $partition"
             cp -af "$MODPATH/$partition" "$MOD_IMG_DIR/" || {
-                ui_print "! Warning: Failed to move $partition"
+                ui_print "! Warning: Failed to copy $partition"
                 continue
             }
             copy_selinux_contexts "$MODPATH/$partition" "$MOD_IMG_DIR/$partition"
+
+            # Keep partition content only in the modules image.
+            # The module directory is reserved for metadata and module state.
+            # Leaving the content here would allow it to be processed by KernelSU as regular module content.
+            rm -rf "$MODPATH/$partition" || {
+                ui_print "! Warning: Failed to remove original $partition"
+                continue
+            }
         fi
     done
 }
+
 
 # REPLACE
 mark_replace() {
