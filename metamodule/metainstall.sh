@@ -31,12 +31,14 @@ module_requires_overlay_move() {
         return 1
     fi
 
-    if [ ! -d "$MODPATH/system" ]; then
-        ui_print "- No system/ directory detected; keeping files under /data/adb/modules"
-        return 1
-    fi
+    for partition in system vendor product system_ext odm oem; do
+        if [ -d "$MODPATH/$partition" ]; then
+            return 0
+        fi
+    done
 
-    return 0
+    ui_print "- No supported partition directory detected; keeping files under /data/adb/modules"
+    return 1
 }
 
 # Copy SELinux contexts from src tree to destination by mirroring each entry.
