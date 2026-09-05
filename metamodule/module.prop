@@ -1,5 +1,4 @@
 id=meta-overlayfs
-metamodule=1
 name=OverlayFS MetaModule
 version=1.3.5
 versionCode=13500
