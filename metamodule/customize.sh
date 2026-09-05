@@ -1,8 +1,8 @@
 #!/system/bin/sh
 
 # KSU vars
-KSU=true
-DEBUG=0
+export KSU=true
+export DEBUG=0
 
 MKE2FS_DEBUG=0
 
